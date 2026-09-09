@@ -178,8 +178,14 @@
         document.getElementById('arrow').style.display  = 'block';
       } else {
         // Safari / Chrome / TikTok / desktop: hand off directly, no extra tap.
+        // Only the AUTO-redirect may use itms-apps:// (a JS hop to the https URL
+        // would load the App Store WEB page instead of the app). The BUTTON must
+        // keep its https href. Verified on device 2026-09-09: Safari asks
+        // "Open this page in 'App Store'?" for the itms-apps redirect; after
+        // Cancel, a tap on an itms-apps button silently does NOTHING — the page
+        // dead-ends. A tapped https apps.apple.com link always navigates and
+        // hands off to the App Store, so it is the fallback that survives Cancel.
         var target = isIOS ? SCHEME : HTTPS;
-        document.getElementById('cta').setAttribute('href', target);
         if (!preview) setTimeout(function () { try { window.location.href = target; } catch (e) {} }, 60);
       }
     })();
