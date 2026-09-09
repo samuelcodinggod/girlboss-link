@@ -119,6 +119,9 @@
 
   <script>
     (function () {
+      // Bump on every deploy. ?debug prints it, so a phone that shows an old
+      // value is serving a stale cached copy (GitHub Pages: max-age=600).
+      var VERSION = '2026-09-09c';
       var APP_ID = '6757707992';
       var HTTPS  = 'https://apps.apple.com/us/app/girlboss-stay-focused/id' + APP_ID;
       var SCHEME = 'itms-apps://apps.apple.com/app/id' + APP_ID;
@@ -156,7 +159,8 @@
         document.body.innerHTML =
           '<pre style="font:12px/1.6 ui-monospace,Menlo,monospace;white-space:pre-wrap;' +
           'word-break:break-all;padding:16px;margin:0;color:#f6e7f0">' +
-          'URL\n'         + esc(location.href) +
+          'PAGE VERSION\n' + VERSION +
+          '\n\nURL\n'     + esc(location.href) +
           '\n\nUSER AGENT\n' + esc(ua) +
           '\n\nFLAGS\nisIOS      = ' + isIOS +
           '\nisMeta     = ' + isMeta +
@@ -187,6 +191,20 @@
         // hands off to the App Store, so it is the fallback that survives Cancel.
         var target = isIOS ? SCHEME : HTTPS;
         if (!preview) setTimeout(function () { try { window.location.href = target; } catch (e) {} }, 60);
+
+        // Belt and suspenders for the button (2026-09-09, Instagram -> "Open in
+        // external browser" -> Safari -> Cancel on the App Store dialog): Safari
+        // may suppress EVERY further App Store handoff on that page load, so even
+        // an https same-tab tap can die silently. A user-gesture window.open
+        // starts a FRESH tab with no suppression state, and the handoff fires
+        // there. Browsers that refuse window.open (TikTok's WKWebView returns
+        // null) fall back to the normal same-tab https navigation.
+        document.getElementById('cta').addEventListener('click', function (e) {
+          e.preventDefault();
+          var w = null;
+          try { w = window.open(HTTPS, '_blank'); } catch (err) {}
+          if (!w) window.location.href = HTTPS;
+        });
       }
     })();
   </script>
