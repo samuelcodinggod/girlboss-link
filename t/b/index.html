@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="robots" content="noindex" />
+  <title>Safari test B</title>
+  <!-- TEST B: JavaScript inserts the meta refresh while the page loads. -->
+  <script>
+    (function () {
+      var m = document.createElement('meta');
+      m.httpEquiv = 'refresh';
+      m.content = '0;url=instagram://extbrowser/?url=' +
+        encodeURIComponent('https://getgirlbossapp.com/t/landed/?via=B');
+      document.head.appendChild(m);
+    })();
+  </script>
+  <link rel="stylesheet" href="/t/style.css" />
+</head>
+<body>
+  <div class="card">
+    <h1>Test B ran</h1>
+    <p>If Instagram asked to open this page outside Instagram, tap to allow it.</p>
+    <a class="btn quiet" href="/t/more/">Back to tests B, C and D</a>
+  </div>
+</body>
+</html>

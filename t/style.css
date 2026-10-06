@@ -1,0 +1,24 @@
+/* Test pages only. Rose Quartz palette from the main page. */
+:root { color-scheme: dark; }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #0a050a radial-gradient(140% 90% at 50% 0%, #2a1030 0%, #12081a 55%, #0a050a 100%) no-repeat;
+  min-height: 100vh;
+  color: #f6e7f0;
+  padding: calc(56px + env(safe-area-inset-top)) 20px calc(24px + env(safe-area-inset-bottom));
+  text-align: center;
+}
+.card { max-width: 380px; margin: 0 auto; }
+h1 { font-size: 28px; margin: 0 0 14px; letter-spacing: -0.4px; }
+p { font-size: 17px; line-height: 1.45; margin: 0 0 16px; color: #e9d3e1; }
+.status { font-weight: 600; padding: 10px 12px; border-radius: 12px; background: rgba(255,255,255,0.06); }
+.btn {
+  display: block; width: 100%; margin: 0 0 14px; padding: 17px 18px;
+  border-radius: 16px; font-size: 18px; font-weight: 700; text-decoration: none;
+  color: #fff; background: linear-gradient(135deg, #f58fc2, #a24bc0);
+}
+.btn.quiet { background: rgba(255,255,255,0.10); font-weight: 600; }
+.big { font-size: 64px; margin: 0 0 6px; }
+.ua { font-size: 11px; color: #a98fa0; word-break: break-all; margin-top: 28px; }

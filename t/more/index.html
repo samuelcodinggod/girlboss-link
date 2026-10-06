@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="robots" content="noindex" />
+  <title>Safari test: B, C, D</title>
+  <link rel="stylesheet" href="/t/style.css" />
+</head>
+<body>
+  <div class="card">
+    <h1>Tests B, C and D</h1>
+    <p>Tap one test. Watch what happens. Then come back here and tap the next one.</p>
+    <!-- TEST B: the page itself adds a meta refresh with JavaScript. -->
+    <a class="btn" href="/t/b/">Test B</a>
+    <!-- TEST C: a normal tap on Instagram's extbrowser link. -->
+    <a class="btn" href="instagram://extbrowser/?url=https%3A%2F%2Fgetgirlbossapp.com%2Ft%2Flanded%2F%3Fvia%3DC">Test C</a>
+    <!-- TEST D: a tap on Safari's own x-safari-https link. -->
+    <a class="btn" href="x-safari-https://getgirlbossapp.com/t/landed/?via=D">Test D</a>
+    <p>When you finish, tell Claude which tests opened Safari.</p>
+  </div>
+</body>
+</html>

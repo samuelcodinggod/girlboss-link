@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <!-- TEST A: a declarative meta refresh to Instagram's undocumented extbrowser scheme.
+       It must stay a static tag. A scripted window.location jump is reported to be dropped. -->
+  <meta http-equiv="refresh" content="0;url=instagram://extbrowser/?url=https%3A%2F%2Fgetgirlbossapp.com%2Ft%2Flanded%2F%3Fvia%3DA" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="robots" content="noindex" />
+  <title>Safari test</title>
+  <link rel="stylesheet" href="/t/style.css" />
+</head>
+<body>
+  <div class="card">
+    <h1>Safari test</h1>
+    <p class="status" id="status">Checking your browser…</p>
+    <p><b>Test A</b> ran when this page opened. If Instagram asked to open this page outside Instagram, tap to allow it.</p>
+    <p>Then come back here and tap the button below.</p>
+    <a class="btn" href="/t/more/">Next: tests B, C and D</a>
+    <p class="ua" id="ua"></p>
+  </div>
+  <script>
+    (function () {
+      var ua = navigator.userAgent;
+      var isMeta = /(FBAN|FBAV|FB_IAB|FBIOS|Instagram|Messenger)/i.test(ua);
+      document.getElementById('status').textContent = isMeta
+        ? 'You are inside Instagram’s browser. Good, the test is valid.'
+        : 'You are NOT inside Instagram’s browser. Open this link from an Instagram DM.';
+      document.getElementById('ua').textContent = ua;
+    })();
+  </script>
+</body>
+</html>

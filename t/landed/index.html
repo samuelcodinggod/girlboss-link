@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="robots" content="noindex" />
+  <title>Safari test result</title>
+  <link rel="stylesheet" href="/t/style.css" />
+</head>
+<body>
+  <div class="card">
+    <p class="big" id="icon">…</p>
+    <h1 id="head">Checking…</h1>
+    <p id="text"></p>
+    <a class="btn" id="store" href="https://apps.apple.com/us/app/girlboss-stay-focused/id6757707992">Check: open the App Store</a>
+    <p class="ua" id="ua"></p>
+  </div>
+  <script>
+    (function () {
+      var ua = navigator.userAgent;
+      var via = new URLSearchParams(location.search).get('via') || '?';
+      var isMeta = /(FBAN|FBAV|FB_IAB|FBIOS|Instagram|Messenger)/i.test(ua);
+      if (isMeta) {
+        document.getElementById('icon').textContent = '❌';
+        document.getElementById('head').textContent = 'Test ' + via + ': still inside Instagram';
+        document.getElementById('text').textContent = 'This page opened, but it is still in Instagram’s browser.';
+        document.getElementById('store').style.display = 'none';
+      } else {
+        document.getElementById('icon').textContent = '✅';
+        document.getElementById('head').textContent = 'Test ' + via + ' worked';
+        document.getElementById('text').textContent = 'This page is open outside Instagram. Tap the button to check that the App Store opens.';
+      }
+      document.getElementById('ua').textContent = ua;
+    })();
+  </script>
+</body>
+</html>
