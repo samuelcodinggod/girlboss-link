@@ -22,3 +22,7 @@ p { font-size: 17px; line-height: 1.45; margin: 0 0 16px; color: #e9d3e1; }
 .btn.quiet { background: rgba(255,255,255,0.10); font-weight: 600; }
 .big { font-size: 64px; margin: 0 0 6px; }
 .ua { font-size: 11px; color: #a98fa0; word-break: break-all; margin-top: 28px; }
+.mark { display: block; width: 80px; height: 80px; margin: 0 auto 18px; border-radius: 22%;
+  box-shadow: 0 10px 30px rgba(236, 100, 166, 0.28); }
+.note { margin-top: 34px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,0.12); }
+.note p { font-size: 15px; color: #c9b1c0; }
