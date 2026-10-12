@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="robots" content="noindex" />
+  <title>TikTok test I</title>
+  <link rel="stylesheet" href="/t/style.css?v=3" />
+</head>
+<body>
+  <div class="card">
+    <h1>Test I</h1>
+    <p>Do not tap anything. Wait 3 seconds.</p>
+    <p class="status" id="status">Trying to open Safari…</p>
+    <a class="btn quiet" href="/t/tt/">Back to the tests</a>
+  </div>
+  <script>
+    // TEST I: x-safari-https with no tap. If TikTok allows it, Safari opens /t/landed/ (✅).
+    setTimeout(function () {
+      try { window.location.href = 'x-safari-https://getgirlbossapp.com/t/landed/?via=I'; } catch (e) {}
+    }, 300);
+    setTimeout(function () {
+      document.getElementById('status').textContent = 'Still here after 3 seconds: Test I did not work.';
+    }, 3000);
+  </script>
+</body>
+</html>

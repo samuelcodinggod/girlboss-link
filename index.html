@@ -115,6 +115,10 @@
       font-size: 12px; font-weight: 600; padding: 5px 9px; border-radius: 8px; white-space: nowrap;
     }
     @keyframes bob { 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(-6px);} }
+    /* TikTok's in-app browser toolbar is [<] [X] ... [•••]. Measured on Sam's iPhone screenshot
+       (414 pt wide, 2026-10-12): the ••• centre sits 26 pt in from the right edge. */
+    body.tt #arrow .up { right: 26px; }
+    body.tt #arrow .lbl { right: 8px; }
 
     /* Instagram on iPhone (html.igx, set in <head>): the escape screen. Instagram's own
        alert appears over it, so this text tells people what the alert is. The class is set
@@ -149,7 +153,7 @@
       </div>
     </div>
 
-    <!-- Default: direct handoff (works in Safari / TikTok / desktop) -->
+    <!-- Default: direct handoff (works in Safari / desktop; NOT in TikTok, which blocks the App Store) -->
     <div id="direct">
       <a id="cta" class="btn" href="https://apps.apple.com/us/app/girlboss-stay-focused/id6757707992">
         <svg viewBox="0 0 384 512" aria-hidden="true"><path d="M318.7 268.7c-.2-36.7 16.4-64.4 50-84.8-18.8-26.9-47.2-41.7-84.7-44.6-35.5-2.8-74.3 20.7-88.5 20.7-15 0-49.4-19.7-76.4-19.7C63.3 141.2 4 184.8 4 273.5q0 39.3 14.4 81.2c12.8 36.7 59 126.7 107.2 125.2 25.2-.6 43-17.9 75.8-17.9 31.8 0 48.3 17.9 76.4 17.9 48.6-.7 90.4-82.5 102.6-119.3-65.2-30.7-61.7-90-61.7-91.9zm-56.6-164.2c27.3-32.4 24.8-61.9 24-72.5-24.1 1.4-52 16.4-67.9 34.9-17.5 19.8-27.8 44.3-25.6 71.9 26 2 49.7-11.4 69.5-34.3z"/></svg>
@@ -158,12 +162,12 @@
       <p class="hint">Opening the App Store…</p>
     </div>
 
-    <!-- Instagram / Facebook: only the ••• → Open in browser path works -->
+    <!-- Facebook / Messenger / TikTok: only the ••• → Open in browser path works -->
     <div id="steps">
       <p class="steps-title">One quick step to download 👇</p>
       <ol class="steps">
         <li><span class="n">1</span><span>Tap <span class="dots-chip">•••</span> in the far top-right corner</span></li>
-        <li><span class="n">2</span><span>Choose <b>“Open in external browser”</b></span></li>
+        <li><span class="n">2</span><span>Choose <b id="menu-item">“Open in external browser”</b></span></li>
         <li><span class="n">3</span><span>The App&nbsp;Store opens automatically ✨</span></li>
       </ol>
     </div>
@@ -173,7 +177,7 @@
     (function () {
       // Bump on every deploy. ?debug prints it, so a phone that shows an old
       // value is serving a stale cached copy (GitHub Pages: max-age=600).
-      var VERSION = '2026-10-06a';
+      var VERSION = '2026-10-12a';
       var APP_ID = '6757707992';
       var HTTPS  = 'https://apps.apple.com/us/app/girlboss-stay-focused/id' + APP_ID;
       var SCHEME = 'itms-apps://apps.apple.com/app/id' + APP_ID;
@@ -186,6 +190,13 @@
       // ••• → Open in browser works. Instagram on iPhone uses the escape in <head> instead.
       var isMeta = /(FBAN|FBAV|FB_IAB|FBIOS|Instagram|Messenger)/i.test(ua);
       var isInstagram = /Instagram/i.test(ua);
+      // TikTok (2026-10-12, Sam's iPhone): TikTok's in-app browser blocks every App Store
+      // handoff. The itms-apps:// auto-redirect AND a tapped https apps.apple.com link both
+      // end in TikTok's toast "Action can't be completed". TikTok has blocked App Store links
+      // in bios since about July 2025 (lukecarry_ on X, 2025-07-14). ••• → "Open in browser"
+      // works (Sam), and Safari then hands off as usual. TikTok's UA carries musical_ly (global),
+      // trill_ (some regions) and ByteDance webview tokens.
+      var isTikTok = /musical_ly|trill_|BytedanceWebview|ByteLocale|TikTok/i.test(ua);
       var escapeOn = /(^|\s)igx(\s|$)/.test(document.documentElement.className);
 
       // Query flags. These MUST match parameter names exactly. A previous substring
@@ -200,12 +211,15 @@
       //              meaningful against Instagram's real toolbar)
       //   ?debug   → dump UA + resolved flags instead of rendering
       //   ?noescape → Instagram: skip the extbrowser escape, show the old steps screen
+      //   ?tt      → force the TikTok steps screen in any browser (for previews)
       var hasParam = function (name) {
         try { return new URLSearchParams(location.search).has(name); }
         catch (e) { return new RegExp('[?&]' + name + '(?=$|[=&])').test(location.search); }
       };
       var preview    = hasParam('preview');
       var forceSteps = hasParam('ig') || hasParam('steps');
+      var forceTikTok = hasParam('tt');
+      var tiktokSteps = (isTikTok && !preview) || forceTikTok;
 
       if (hasParam('debug')) {
         var esc = function (t) {
@@ -221,13 +235,16 @@
           '\n\nFLAGS\nisIOS      = ' + isIOS +
           '\nisMeta     = ' + isMeta +
           '\nisInstagram = ' + isInstagram +
+          '\nisTikTok   = ' + isTikTok +
           '\nescape     = ' + (isIOS && isInstagram && !preview && !forceSteps && !hasParam('noescape')) +
           '\npreview    = ' + preview +
           '\nforceSteps = ' + forceSteps +
           '\n\nWOULD SHOW\n' +
           ((isIOS && isInstagram && !preview && !forceSteps && !hasParam('noescape'))
             ? 'Instagram escape: Instagram alert, then the App Store (••• steps as backup)'
-            : (forceSteps || (isMeta && !preview))
+            : tiktokSteps
+              ? 'TikTok steps screen (••• → Open in browser)'
+              : (forceSteps || (isMeta && !preview))
               ? 'steps screen (Facebook / Messenger path)'
               : 'direct App Store handoff') +
           '</pre>';
@@ -249,14 +266,19 @@
         return;
       }
 
-      if (forceSteps || (isMeta && !preview)) {
+      if (tiktokSteps || forceSteps || (isMeta && !preview)) {
         // Show the guided path — hide the dead button so nobody taps a no-op.
+        // TikTok: no auto-redirect at all, so its "Action can't be completed" toast never shows.
         document.body.classList.add('meta');   // top-align the card, clear room for the arrow
+        if (tiktokSteps) {
+          document.body.classList.add('tt');   // the arrow aims at TikTok's •••
+          document.getElementById('menu-item').textContent = '“Open in browser”';
+        }
         document.getElementById('direct').style.display = 'none';
         document.getElementById('steps').style.display  = 'block';
         document.getElementById('arrow').style.display  = 'block';
       } else {
-        // Safari / Chrome / TikTok / desktop: hand off directly, no extra tap.
+        // Safari / Chrome / desktop: hand off directly, no extra tap.
         // Only the AUTO-redirect may use itms-apps:// (a JS hop to the https URL
         // would load the App Store WEB page instead of the app). The BUTTON must
         // keep its https href. Verified on device 2026-09-09: Safari asks

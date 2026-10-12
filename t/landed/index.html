@@ -19,16 +19,17 @@
     (function () {
       var ua = navigator.userAgent;
       var via = new URLSearchParams(location.search).get('via') || '?';
-      var isMeta = /(FBAN|FBAV|FB_IAB|FBIOS|Instagram|Messenger)/i.test(ua);
-      if (isMeta) {
+      var inside = /musical_ly|trill_|BytedanceWebview|ByteLocale|TikTok/i.test(ua) ? 'TikTok' :
+                   /(FBAN|FBAV|FB_IAB|FBIOS|Instagram|Messenger)/i.test(ua) ? 'Instagram' : '';
+      if (inside) {
         document.getElementById('icon').textContent = '❌';
-        document.getElementById('head').textContent = 'Test ' + via + ': still inside Instagram';
-        document.getElementById('text').textContent = 'This page opened, but it is still in Instagram’s browser.';
+        document.getElementById('head').textContent = 'Test ' + via + ': still inside ' + inside;
+        document.getElementById('text').textContent = 'This page opened, but it is still in ' + inside + '’s browser.';
         document.getElementById('store').style.display = 'none';
       } else {
         document.getElementById('icon').textContent = '✅';
         document.getElementById('head').textContent = 'Test ' + via + ' worked';
-        document.getElementById('text').textContent = 'This page is open outside Instagram. Tap the button to check that the App Store opens.';
+        document.getElementById('text').textContent = 'This page is open outside the app. Tap the button to check that the App Store opens.';
       }
       document.getElementById('ua').textContent = ua;
     })();
