@@ -162,13 +162,15 @@
       <p class="hint">Opening the App Store…</p>
     </div>
 
-    <!-- Facebook / Messenger / TikTok: only the ••• → Open in browser path works -->
+    <!-- Facebook / Messenger / TikTok: only the ••• → Open in browser path works.
+         Step 3: the browser then asks "Open this page in 'App Store'?", so the App Store does
+         NOT open by itself (Sam, TikTok on his iPhone, 2026-10-13). -->
     <div id="steps">
       <p class="steps-title">One quick step to download 👇</p>
       <ol class="steps">
         <li><span class="n">1</span><span>Tap <span class="dots-chip">•••</span> in the far top-right corner</span></li>
         <li><span class="n">2</span><span>Choose <b id="menu-item">“Open in external browser”</b></span></li>
-        <li><span class="n">3</span><span>The App&nbsp;Store opens automatically ✨</span></li>
+        <li><span class="n">3</span><span>Tap <b>“Open”</b> when it asks to open the App&nbsp;Store ✨</span></li>
       </ol>
     </div>
   </div>
@@ -177,7 +179,7 @@
     (function () {
       // Bump on every deploy. ?debug prints it, so a phone that shows an old
       // value is serving a stale cached copy (GitHub Pages: max-age=600).
-      var VERSION = '2026-10-12a';
+      var VERSION = '2026-10-13a';
       var APP_ID = '6757707992';
       var HTTPS  = 'https://apps.apple.com/us/app/girlboss-stay-focused/id' + APP_ID;
       var SCHEME = 'itms-apps://apps.apple.com/app/id' + APP_ID;
