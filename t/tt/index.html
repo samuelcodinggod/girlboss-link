@@ -9,26 +9,22 @@
 </head>
 <body>
   <div class="card">
-    <h1>TikTok tests</h1>
-    <p>Open this page from TikTok. Tap a test, watch what happens, then come back here.</p>
-    <!-- TEST M (2026-10-28): the redirect that works in Instagram ("Redirecting you to…", then
-         location.replace to itms-apps:// with ?mt=8 at 1.3 s). -->
-    <a class="btn" href="/t/m/">Test M: the Instagram way</a>
-    <!-- TEST N (2026-10-28): BeFreed's own TikTok link. Adjust's server sends TikTok straight to
-         https://apps.apple.com/app/id6739747450?mt=8, with no "Redirecting" page. -->
-    <a class="btn" href="https://befreed.go.link/tiktok">Test N: BeFreed’s TikTok link</a>
-    <p>Test N opens BeFreed’s App Store page, not ours. That is OK.</p>
-    <p class="status">If M or N opens the App Store, you can stop here.</p>
-    <p style="margin-top: 28px">Safari tests (from Oct 12):</p>
-    <!-- TEST G: a tap on Safari's x-safari-https link to a page that says if it left TikTok. -->
-    <a class="btn quiet" href="x-safari-https://getgirlbossapp.com/t/landed/?via=G">Test G</a>
-    <!-- TEST H: a tap on x-safari-https straight to the App Store page. -->
-    <a class="btn quiet" href="x-safari-https://apps.apple.com/us/app/girlboss-stay-focused/id6757707992">Test H</a>
-    <!-- TEST I: the same jump as G, but with NO tap (the page tries it by itself). -->
-    <a class="btn quiet" href="/t/tt/i/">Test I</a>
-    <!-- TEST J: a normal link that asks for a new window. -->
-    <a class="btn quiet" href="https://getgirlbossapp.com/t/landed/?via=J" target="_blank" rel="noopener">Test J</a>
-    <p>When you finish, tell Claude what each test did. For example: “M: Action can’t be completed. N: the same. G opened Safari.”</p>
+    <h1>TikTok tests, round 3</h1>
+    <p>Open this page from TikTok. Tap each test, watch what happens, then come back here.</p>
+    <!-- TEST R (2026-10-28): no tap. "Redirecting you to…", then the page jumps to our worker
+         girlboss-go, which answers 302 to the App Store (like BeFreed's link in test N). -->
+    <a class="btn" href="/t/r/">Test R: no tap, through our server</a>
+    <!-- TEST Q (2026-10-28): a TAP on a link to our worker (the closest copy of test N). -->
+    <a class="btn" href="https://girlboss-go.samuelbondgritton.workers.dev/">Test Q: tap, through our server</a>
+    <!-- TEST P (2026-10-28): no tap. The page jumps straight to https://apps.apple.com/app/id...?mt=8. -->
+    <a class="btn" href="/t/p/">Test P: no tap, straight to Apple</a>
+    <!-- TEST O (2026-10-28): a TAP on https://apps.apple.com/app/id...?mt=8 (the Oct 12 link had no ?mt=8). -->
+    <a class="btn" href="https://apps.apple.com/app/id6757707992?mt=8">Test O: tap, straight to Apple</a>
+    <p>When you finish, tell Claude which tests opened the App Store. For example: “R and Q worked, P and O did not.”</p>
+    <div class="note">
+      <p>Round 2: Test M did not work. Test N (BeFreed’s TikTok link) worked.</p>
+      <a class="btn quiet" href="https://befreed.go.link/tiktok">Test N again</a>
+    </div>
   </div>
 </body>
 </html>
