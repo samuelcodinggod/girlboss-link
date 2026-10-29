@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="robots" content="noindex" />
+  <title>YouTube tests</title>
+  <link rel="stylesheet" href="/t/style.css?v=3" />
+</head>
+<body>
+  <div class="card">
+    <h1>YouTube tests</h1>
+    <p>Open this page from the YouTube app. Tap a test, watch what happens, then come back here.</p>
+    <!-- YouTube round 1 (2026-10-29). Sam opens this page from a "Test" link on a GirlBoss YouTube
+         channel. In Safari, the live page's itms-apps:// jump asks "Open this page in 'App Store'?"
+         (2026-09-09, 2026-10-13). These tests show what removes that question in YouTube.
+         TEST S: no tap. The TikTok method (test R): "Redirecting you to…", then a jump to the test
+         worker girlboss-test, which answers with a 302 to the App Store. -->
+    <a class="btn" id="s" href="/t/s/">Test S: no tap, through our server</a>
+    <!-- TEST U: a TAP on the App Store link itself. If U opens the App Store by itself, the
+         YouTube channels can link straight to the App Store. -->
+    <a class="btn" id="u" href="https://apps.apple.com/app/id6757707992?mt=8">Test U: tap, straight to Apple</a>
+    <!-- TEST V: a TAP on a link to the test worker (a 302 to the App Store). -->
+    <a class="btn" id="v" href="https://girlboss-test.samuelbondgritton.workers.dev/?via=V">Test V: tap, through our server</a>
+    <p>If a box asks “Open this page in ‘App Store’?”, tap <b>Open</b>.</p>
+    <p>If S opens the App Store by itself, you can stop. Tell Claude, for each test you tried: it opened by itself, it asked first, or nothing happened.</p>
+    <p class="ua" id="ua"></p>
+  </div>
+  <script>
+    // Each event goes to the test worker's log, so Claude can read this browser's user agent
+    // and when the page was hidden (the App Store opened) after a tap.
+    (function () {
+      var LOG = 'https://girlboss-test.samuelbondgritton.workers.dev/log';
+      var t0 = Date.now();
+      var tap = '';
+      var tapAt = 0;
+      function send(what) {
+        try {
+          navigator.sendBeacon(LOG, JSON.stringify({
+            page: 'hub', what: what, tap: tap, ms: Date.now() - (tapAt || t0)
+          }));
+        } catch (e) {}
+      }
+      send('load');
+      ['s', 'u', 'v'].forEach(function (id) {
+        document.getElementById(id).addEventListener('click', function () {
+          tap = id.toUpperCase();
+          tapAt = Date.now();
+          send('tap');
+        });
+      });
+      document.addEventListener('visibilitychange', function () {
+        if (document.hidden) send('hidden');
+      });
+      document.getElementById('ua').textContent = navigator.userAgent;
+    })();
+  </script>
+</body>
+</html>
